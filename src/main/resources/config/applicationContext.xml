@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="  
+                http://www.springframework.org/schema/beans  
+                http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+                http://www.springframework.org/schema/aop  
+                http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+	<!-- <aop:config>
+		<aop:aspect id="TestAspect" ref="aspectBean">
+			<aop:pointcut id="businessService" expression="execution(* com.spring.service.*.*(..))" />
+			<aop:before pointcut-ref="businessService" method="doBefore" />
+			<aop:after pointcut-ref="businessService" method="doAfter" />
+			<aop:around pointcut-ref="businessService" method="doAround" />
+			<aop:after-throwing pointcut-ref="businessService" method="doThrowing" throwing="ex" />
+		</aop:aspect>
+	</aop:config>
+	<bean id="aspectBean" class="com.spring.aop.TestAspect" />
+	<bean id="aService" class="com.spring.service.AServiceImpl"></bean>
+	<bean id="bService" class="com.spring.service.BServiceImpl"></bean> -->
+
+
+
+	<bean id="checkuser" class="com.proxy.test.CheckUser" />
+
+	<bean id="checkUserAfter" class="com.proxy.test.CheckUserAfter" />
+
+	<bean id="target" class="com.proxy.test.UserLoginImpl" scope="prototype" />
+
+	<!-- 使用Spring代理工厂配置一个代理 -->
+	<bean id="userlogin" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 指定代理接口，如果是多个接口，可以使用List元素指定 -->
+		<property name="proxyInterfaces" value="com.proxy.test.UserLogin" />
+		<!-- 指定通知 -->
+		<property name="interceptorNames" value="checkuser,checkUserAfter" />
+		<!-- 指定目标对象 -->    <!-- 这个地方的name 我开始按照书上写的target报错，我进ProxyFactoryBean类看 没有target属性和set它的方法，有targetName属性修改了就对了 -->
+		<property name="targetName" value="target" />
+	</bean>
+
+</beans>  
